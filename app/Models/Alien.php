@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Alien extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'planet',
+        'age'
+    ];
 }
