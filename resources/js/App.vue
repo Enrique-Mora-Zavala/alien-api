@@ -1,9 +1,109 @@
 <template>
-    <div>
+    <div style="padding:20px">
+
         <h1>Aliens CRUD</h1>
-        <p>Vue 3 funcionando correctamente 🚀</p>
+
+        <h3>Nuevo Alien</h3>
+
+        <form @submit.prevent="guardarAlien">
+
+            <input
+                v-model="form.name"
+                placeholder="Nombre"
+            />
+
+            <br><br>
+
+            <input
+                v-model="form.planet"
+                placeholder="Planeta"
+            />
+
+            <br><br>
+
+            <input
+                v-model="form.age"
+                type="number"
+                placeholder="Edad"
+            />
+
+            <br><br>
+
+            <button type="submit">
+                Guardar
+            </button>
+
+        </form>
+
+        <hr>
+
+        <h3>Lista de Aliens</h3>
+
+        <table border="1" cellpadding="10">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Planeta</th>
+                    <th>Edad</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr
+                    v-for="alien in aliens"
+                    :key="alien.id"
+                >
+                    <td>{{ alien.id }}</td>
+                    <td>{{ alien.name }}</td>
+                    <td>{{ alien.planet }}</td>
+                    <td>{{ alien.age }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
     </div>
 </template>
 
 <script setup>
+
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const aliens = ref([])
+
+const form = ref({
+    name: '',
+    planet: '',
+    age: ''
+})
+
+const cargarAliens = async () => {
+
+    const response = await axios.get('/api/aliens')
+
+    aliens.value = response.data
+}
+
+const guardarAlien = async () => {
+
+    await axios.post('/api/aliens', form.value)
+
+    form.value = {
+        name: '',
+        planet: '',
+        age: ''
+    }
+
+    cargarAliens()
+}
+
+onMounted(() => {
+    cargarAliens()
+})
+
 </script>
