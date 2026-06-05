@@ -30,7 +30,7 @@
             <br><br>
 
             <button type="submit">
-                Guardar
+                {{ editingId ? 'Actualizar' : 'Guardar' }}
             </button>
 
         </form>
@@ -65,6 +65,9 @@
                         <button @click="eliminarAlien(alien.id)">
                             Eliminar
                         </button>
+                        <button @click="editarAlien(alien)">
+                            Editar
+                        </button>
                     </td>
                 </tr>
 
@@ -82,6 +85,8 @@ import axios from 'axios'
 
 const aliens = ref([])
 
+const editingId = ref(null)
+
 const form = ref({
     name: '',
     planet: '',
@@ -97,7 +102,22 @@ const cargarAliens = async () => {
 
 const guardarAlien = async () => {
 
-    await axios.post('/api/aliens', form.value)
+    if (editingId.value) {
+
+        await axios.put(
+            `/api/aliens/${editingId.value}`,
+            form.value
+        )
+
+        editingId.value = null
+
+    } else {
+
+        await axios.post(
+            '/api/aliens',
+            form.value
+        )
+    }
 
     form.value = {
         name: '',
@@ -113,6 +133,17 @@ const eliminarAlien = async (id) => {
     await axios.delete(`/api/aliens/${id}`)
 
     cargarAliens()
+}
+
+const editarAlien = (alien) => {
+
+    editingId.value = alien.id
+
+    form.value = {
+        name: alien.name,
+        planet: alien.planet,
+        age: alien.age
+    }
 }
 
 onMounted(() => {
