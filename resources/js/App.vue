@@ -47,6 +47,7 @@
                     <th>Nombre</th>
                     <th>Planeta</th>
                     <th>Edad</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 
@@ -60,6 +61,11 @@
                     <td>{{ alien.name }}</td>
                     <td>{{ alien.planet }}</td>
                     <td>{{ alien.age }}</td>
+                    <td>
+                        <button @click="eliminarAlien(alien.id)">
+                            Eliminar
+                        </button>
+                    </td>
                 </tr>
 
             </tbody>
@@ -98,6 +104,13 @@ const guardarAlien = async () => {
         planet: '',
         age: ''
     }
+
+    cargarAliens()
+}
+
+const eliminarAlien = async (id) => {
+
+    await axios.delete(`/api/aliens/${id}`)
 
     cargarAliens()
 }
