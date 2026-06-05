@@ -1,9 +1,9 @@
 <template>
-    <div style="padding:20px">
+    <div class="container">
 
-        <h1>Aliens CRUD</h1>
+        <h1>Aliens CRUD Vue & Laravel</h1>
 
-        <h3>Nuevo Alien</h3>
+        <h3>Insertar alien</h3>
 
         <form @submit.prevent="guardarAlien">
 
@@ -37,7 +37,7 @@
 
         <hr>
 
-        <h3>Lista de Aliens</h3>
+        <h3>Lista de aliens</h3>
 
         <table border="1" cellpadding="10">
 
@@ -61,12 +61,12 @@
                     <td>{{ alien.name }}</td>
                     <td>{{ alien.planet }}</td>
                     <td>{{ alien.age }}</td>
-                    <td>
-                        <button @click="eliminarAlien(alien.id)">
-                            Eliminar
-                        </button>
-                        <button @click="editarAlien(alien)">
+                    <td style="white-space: nowrap;">
+                        <button class="btn-edit" @click="editarAlien(alien)">
                             Editar
+                        </button>
+                        <button class="btn-delete" @click="eliminarAlien(alien.id)">
+                            Eliminar
                         </button>
                     </td>
                 </tr>
@@ -128,13 +128,6 @@ const guardarAlien = async () => {
     cargarAliens()
 }
 
-const eliminarAlien = async (id) => {
-
-    await axios.delete(`/api/aliens/${id}`)
-
-    cargarAliens()
-}
-
 const editarAlien = (alien) => {
 
     editingId.value = alien.id
@@ -144,6 +137,13 @@ const editarAlien = (alien) => {
         planet: alien.planet,
         age: alien.age
     }
+}
+
+const eliminarAlien = async (id) => {
+
+    await axios.delete(`/api/aliens/${id}`)
+
+    cargarAliens()
 }
 
 onMounted(() => {
